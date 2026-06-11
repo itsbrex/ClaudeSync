@@ -7,8 +7,8 @@ import io
 
 from tqdm import tqdm
 
-from claudesync.utils import compute_md5_hash
-from claudesync.exceptions import ProviderError
+from ctxsync.utils import compute_md5_hash
+from ctxsync.exceptions import ProviderError
 from .compression import compress_content, decompress_content
 
 logger = logging.getLogger(__name__)
@@ -102,7 +102,7 @@ class SyncManager:
         )
 
         remote_file_name = (
-            f"claudesync_packed_{datetime.now().strftime('%Y%m%d%H%M%S')}.dat"
+            f"ctxsync_packed_{datetime.now().strftime('%Y%m%d%H%M%S')}.dat"
         )
         self._upload_compressed_file(compressed_content, remote_file_name)
 
@@ -145,9 +145,7 @@ class SyncManager:
             self.active_organization_id, self.active_project_id
         )
         compressed_files = [
-            rf
-            for rf in remote_files
-            if rf["file_name"].startswith("claudesync_packed_")
+            rf for rf in remote_files if rf["file_name"].startswith("ctxsync_packed_")
         ]
         if compressed_files:
             latest_file = max(compressed_files, key=lambda x: x["file_name"])
@@ -183,7 +181,7 @@ class SyncManager:
 
     def _cleanup_old_remote_files(self, remote_files):
         for remote_file in remote_files:
-            if remote_file["file_name"].startswith("claudesync_packed_"):
+            if remote_file["file_name"].startswith("ctxsync_packed_"):
                 self.provider.delete_file(
                     self.active_organization_id,
                     self.active_project_id,

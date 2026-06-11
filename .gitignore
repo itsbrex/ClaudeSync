@@ -168,9 +168,14 @@ __pycache__
 # claude
 claude.sync
 config.json
-claudesync.log
+ctxsync.log
 claude_chats
 some_value
-.claudesync
+.ctxsync
 
 ROADMAP.md
+
+# legacy names from before the ClaudeSync -> ctxsync rename
+claudesync.log
+.claudesync
+

@@ -1,0 +1,32 @@
+[project]
+name = "claudesync"
+version = "0.7.7"
+authors = [
+    {name = "Jahziah Wagner", email = "540380+jahwag@users.noreply.github.com"},
+]
+description = "DEPRECATED: ClaudeSync has been renamed to ctxsync. Install ctxsync instead."
+license = {file = "LICENSE"}
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 7 - Inactive",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "ctxsync>=0.8.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/jahwag/ctxsync"
+
+[project.scripts]
+claudesync = "claudesync:main"
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["claudesync"]

@@ -2,7 +2,7 @@ import json
 import os
 
 import click
-from claudesync.exceptions import ProviderError
+from ctxsync.exceptions import ProviderError
 from ..utils import (
     handle_errors,
     validate_and_get_provider,
@@ -16,6 +16,17 @@ def submodule():
     pass
 
 
+def _local_config_path(local_path):
+    """Returns the project's config.local.json path, preferring .ctxsync but
+    falling back to a legacy .claudesync directory from before the rename."""
+    config_path = os.path.join(local_path, ".ctxsync", "config.local.json")
+    if not os.path.exists(config_path):
+        legacy_path = os.path.join(local_path, ".claudesync", "config.local.json")
+        if os.path.exists(legacy_path):
+            return legacy_path
+    return config_path
+
+
 @submodule.command()
 @click.pass_obj
 @handle_errors
@@ -25,7 +36,7 @@ def ls(config):
     if not local_path:
         click.echo(
             "No local project path found. Please select an existing project or create a new one using "
-            "'claudesync project select' or 'claudesync project create'."
+            "'ctxsync project select' or 'ctxsync project create'."
         )
         return
 
@@ -54,7 +65,7 @@ def create(config):
     if not local_path:
         click.echo(
             "No local project path found. Please select an existing project or create a new one using "
-            "'claudesync project select' or 'claudesync project create'."
+            "'ctxsync project select' or 'ctxsync project create'."
         )
         return
 
@@ -74,8 +85,8 @@ def create(config):
         f"Detected {len(submodules_with_files)} submodule(s). Checking for existing remote projects:"
     )
 
-    # Load existing local config
-    local_config_path = os.path.join(local_path, ".claudesync", "config.local.json")
+    # Load existing local config (the project may still use a legacy .claudesync dir)
+    local_config_path = _local_config_path(local_path)
     with open(local_config_path, "r") as f:
         local_config = json.load(f)
 
